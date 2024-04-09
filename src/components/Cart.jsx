@@ -1,9 +1,9 @@
 import "./Cart.css";
-import { useId } from "react";
+import React, { useId } from "react";
 import { CartIcon, ClearCartIcon } from "./Icons";
 import { useCart } from "../hooks/useCart";
 
-function CartItem({ thumbnail, title, price, quantity, addToCart }) {
+function CartItem({ thumbnail, title, price, quantity, addToCart, restToCart }) {
     return (
         <li>
         <img src={ thumbnail } alt= {title} />
@@ -12,6 +12,8 @@ function CartItem({ thumbnail, title, price, quantity, addToCart }) {
         </div>
 
         <footer>
+            <button onClick={restToCart} 
+            disabled={quantity <= 0}>-</button>
             <small>Qty: {quantity}</small>
             <button onClick={addToCart}>+</button>
         </footer>
@@ -22,7 +24,11 @@ function CartItem({ thumbnail, title, price, quantity, addToCart }) {
 export function Cart () {
    const cartCheckboxId = useId();
 
-   const { cart, clearCart, addToCart } = useCart();
+   const { cart, clearCart, addToCart, restToCart } = useCart();
+
+    const totalProduct = cart.reduce((total, product) => total + product.quantity, 0);
+    const totalPago = cart.reduce((total, product) => total + product.price * product.quantity, 0);
+
     return(
         <>
         <label className="cart-button" htmlFor={ cartCheckboxId}>
@@ -36,12 +42,14 @@ export function Cart () {
                     <CartItem 
                     key={ product.id }
                     addToCart={ () => addToCart(product)}
+                    restToCart={ () => restToCart(product)}
                     { ...product}
                     />
                 ))
             }
             </ul>
- 
+            <p>Productos: {totalProduct}</p>
+            <p>Total a pagar: ${totalPago}</p>
             <button style={{backgroundColor: "red"}} onClick={clearCart}>
                 <ClearCartIcon />
             </button>
