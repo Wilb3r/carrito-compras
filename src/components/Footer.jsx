@@ -8,7 +8,7 @@ export function Footer() {
     return (
         <footer className="footer">
             <h4><span>Wilber Perdomo</span></h4>
-            <h5>©The Black Market ☺</h5>
+            <h5>©The Market </h5>
         </footer>
     )
 }
